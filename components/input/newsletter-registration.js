@@ -1,20 +1,45 @@
 import classes from './newsletter-registration.module.css';
-import { useRef } from 'react'
+import { useContext, useRef } from 'react'
+import { NotificationCCtx } from '../../store/notificationContext'
 function NewsletterRegistration() {
+  const notiCtx = useContext(NotificationCCtx)
+
   const inpEm = useRef();
   function registrationHandler(event) {
     event.preventDefault();
+    notiCtx.notification({
+      title: "Registering for newsletter !",
+      message: "Please wait a few sec ...",
+      status: "pending"
+    })
     const entEm = inpEm.current.value;
     fetch('/api/newsletter-hdl', {
       method: 'POST',
       body: JSON.stringify( { email: entEm } ),
       headers: {
         'content-type': 'application/json',
-
       }
     })
-    .then( resp => resp.json())
-    .then( data => console.log(data.message) )
+    .then( resp => {
+      if (resp.ok) {return resp.json()}
+      resp.json().then(data => {
+        throw new Error(data.message || "resp is not returned 'ok'")
+      })
+    })
+    .then( data => {
+      notiCtx.notification({
+        title: "Just Signed up ",
+        message: "You are on our e-mailing list ...",
+        status: "success"
+      })
+    })
+    .catch( err => {
+      notiCtx.notification({
+        title: "Something went wrong !",
+        message: err.message || "Something has failed on us ...",
+        status: "error"
+      })
+    })
   }
 
   return (
