@@ -7,9 +7,9 @@ async function newsletterHandler(req, res) {
             res.status(422).json( {message: "invalid em"})
             return;
         }
-        const client = await MongoClient.connect('mongodb+srv://anyadmin:tw22d56f@cluster0.l3tew0h.mongodb.net/newsletter?retryWrites=true&w=majority')
+        const client = await MongoClient.connect('mongodb+srv://anyadmin:tw22d56f@cluster0.l3tew0h.mongodb.net/events?retryWrites=true&w=majority')
         const db = client.db();
-        await db.collection('email').insertOne({email: em})
+        await db.collection('newsletter').insertOne({email: em})
         client.close();
         res.status(201).json({message: "signed up done!"})
     }
