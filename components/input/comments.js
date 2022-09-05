@@ -26,7 +26,7 @@ function Comments(props) {
       method: 'POST',
       body: JSON.stringify(commentData),
       headers: {
-        'content-type': 'application/data'
+        'content-type': 'application/json'
       }
     })
     .then( resp => resp.json())
