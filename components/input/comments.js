@@ -13,12 +13,13 @@ function Comments(props) {
       fetch('/api/comments/' + eventId)
       .then(resp => resp.json())
       .then(data => {
-        if (data) {
+        console.log("🚀 ~ data", data)
+        if (data.comments) {
           setComments(data.comments)
         }
       })
     }
-  }, [showComments])
+  }, [showComments])    // This get triggered by one banch update of two setStates from line 38 and 40.
 
   function toggleCommentsHandler() {
     setShowComments((prevStatus) => !prevStatus);
@@ -32,15 +33,18 @@ function Comments(props) {
       }
     })
     .then( resp => resp.json())
-    .then( () => {
-      setShowComments('false');
-      // console.log("* * showComments:", showComments); // true bcoz of scheduled setState prevline.
-      setShowComments(prev => {
-        // console.log("* * prev:", prev)                // false bcoz of setState previously.
-        // return !prev;                                 // this line not works!
-        return 'true';                                // this line works!
-      });
-      // console.log("* * showComments:", showComments); // true bcoz of two scheduled setState previously.
+    .then( data => {
+      console.log("🚀 ~ data", data)
+      if (data.result) {
+        setShowComments('false');
+        // console.log("* * showComments:", showComments); // true bcoz of scheduled setState prevline.
+        setShowComments(prev => {
+          // console.log("* * prev:", prev)                // false bcoz of setState previously.
+          // return !prev;                                 // this line not works!
+          return 'true';                                // this line works!
+        });
+        // console.log("* * showComments:", showComments); // true bcoz of two scheduled setState previously.
+      }
     })
   }
 
