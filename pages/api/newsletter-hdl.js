@@ -1,12 +1,4 @@
-import { MongoClient } from 'mongodb'
-async function connectDB() {
-    const client = await MongoClient.connect('mongodb+srv://anyadmin:tw22d56f@cluster0.l3tew0h.mongodb.net/events?retryWrites=true&w=majority')
-    return client;
-}
-async function insertDocument(client, documents) {
-    const db = client.db();
-    await db.collection('newsletter').insertOne(documents)
-}
+import { connectDB, insertDocument } from '../../helpers/db-util'
 async function newsletterHandler(req, res) {
     if (req.method === 'POST') {
         const em = req.body.email
@@ -25,7 +17,7 @@ async function newsletterHandler(req, res) {
         }
 
         try {
-            await insertDocument(client, {email: em});
+            await insertDocument(client, 'newsletter', {email: em});
             client.close();
         }
         catch (err) {
