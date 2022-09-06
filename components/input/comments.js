@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 
 import CommentList from './comment-list';
 import NewComment from './new-comment';
 import classes from './comments.module.css';
-
+import { NotificationCCtx } from '../../store/notificationContext'
 function Comments(props) {
+  const notiCtx = useContext(NotificationCCtx)
   const { eventId } = props;
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
@@ -25,6 +26,11 @@ function Comments(props) {
     setShowComments((prevStatus) => !prevStatus);
   }
   function addCommentHandler(commentData) {
+    notiCtx.showNoti_mthd_fromCtx({
+      title: "Posting for your comment !",
+      message: "Please wait a few sec ...",
+      status: "pending"
+    })
     fetch('/api/comments/' + eventId, {
       method: 'POST',
       body: JSON.stringify(commentData),
@@ -32,9 +38,19 @@ function Comments(props) {
         'content-type': 'application/json'
       }
     })
-    .then( resp => resp.json())
+    .then( resp => {
+      if (resp.ok) {return resp.json()}
+      resp.json().then(data => {
+        throw new Error(data.message || "resp is not returned 'ok'")
+      })
+      resp.json()
+    })
     .then( data => {
-      console.log("🚀 ~ data", data)
+      notiCtx.showNoti_mthd_fromCtx({
+        title: "Success. Posting for your comment !",
+        message: "We have posted your comment now ...",
+        status: "success"
+      })
       if (data.result) {
         setShowComments('false');
         // console.log("* * showComments:", showComments); // true bcoz of scheduled setState prevline.
@@ -45,6 +61,13 @@ function Comments(props) {
         });
         // console.log("* * showComments:", showComments); // true bcoz of two scheduled setState previously.
       }
+    })
+    .catch( err => {
+      notiCtx.showNoti_mthd_fromCtx({
+        title: "Something went not right !",
+        message: err.message || "Something went not right, we can fix it ...",
+        status: "error"
+      })
     })
   }
 

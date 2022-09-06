@@ -7,7 +7,7 @@ function NewsletterRegistration() {
   const inpEm = useRef();
   function registrationHandler(event) {
     event.preventDefault();
-    notiCtx.notification({
+    notiCtx.showNoti_mthd_fromCtx({
       title: "Registering for newsletter !",
       message: "Please wait a few sec ...",
       status: "pending"
@@ -26,8 +26,8 @@ function NewsletterRegistration() {
         throw new Error(data.message || "resp is not returned 'ok'")
       })
     })
-    .then( data => {
-      notiCtx.notification({
+    .then( () => {
+      notiCtx.showNoti_mthd_fromCtx({
         title: "Just Signed up ",
         message: "You are on our e-mailing list ...",
         status: "success"
@@ -35,8 +35,8 @@ function NewsletterRegistration() {
     })
     .catch( err => {
       notiCtx.notification({
-        title: "Something went wrong !",
-        message: err.message || "Something has failed on us ...",
+        title: "Something went not right !",
+        message: err.message || "Something went not right, we can fix it ...",
         status: "error"
       })
     })

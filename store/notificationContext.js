@@ -1,4 +1,4 @@
-import { createContext } from 'react'
+import { createContext, useEffect, useState } from 'react'
 
 export const NotificationCCtx = createContext({
     notification: null,
@@ -8,8 +8,19 @@ export const NotificationCCtx = createContext({
 
     }
 })
-export function NotiCtxPrvdr_Cmp() {
+export function NotiCtxPrvdr_Cmp(props) {
     const [activeNotification, setActiveNotification] = useState();
+    useEffect( () => {
+        if (activeNotification && 
+        (activeNotification.success === 'success' || activeNotification.status === 'error')) {
+            const timer = setTimeout( () => {
+                setActiveNotification(null)
+            }, 3000)
+            return () => {
+                clearTimeout(timer);
+            }
+        }
+    }, [activeNotification] )
     function showNoti_hdl(notificationData) {
         setActiveNotification(notificationData)
     }
