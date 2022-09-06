@@ -2,17 +2,17 @@ import { createContext, useEffect, useState } from 'react'
 
 export const NotificationCCtx = createContext({
     notification: null,
-    showNoti_mthd_fromCtx: function(notificationData) {
+    showNoti_mthd_fromCtx: function({ title,message, status }) {
     },
     hideNoti_mthd_fromCtx: function() {
-
     }
 })
 export function NotiCtxPrvdr_Cmp(props) {
     const [activeNotification, setActiveNotification] = useState();
     useEffect( () => {
-        if (activeNotification && 
-        (activeNotification.success === 'success' || activeNotification.status === 'error')) {
+        console.log("🚀 ~ activeNotification", activeNotification)
+        if (activeNotification &&
+        (activeNotification.status === 'success' || activeNotification.status === 'error')) {
             const timer = setTimeout( () => {
                 setActiveNotification(null)
             }, 3000)
