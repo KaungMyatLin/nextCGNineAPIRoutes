@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb'
 export async function connectDB() {
-    const client = await MongoClient.connect('mongodb+srv://an:tw22d56f@cluster0.l3tew0h.mongodb.net/events?retryWrites=true&w=majority')
+    const client = await MongoClient.connect('mongodb+srv://anyadmin:tw22d56f@cluster0.l3tew0h.mongodb.net/events?retryWrites=true&w=majority')
     return client;
 }
 export async function insertDocument(client, collection, documents) {

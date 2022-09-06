@@ -21,6 +21,7 @@ function NewsletterRegistration() {
       }
     })
     .then( resp => {
+    console.log("🚀 ~ resp", resp)
       if (resp.ok) {return resp.json()}
       resp.json().then(data => {
         throw new Error(data.message || "resp is not returned 'ok'")
