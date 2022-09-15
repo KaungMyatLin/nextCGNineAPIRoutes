@@ -52,12 +52,12 @@ function Comments(props) {
         status: "success"
       })
       if (data.result) {
-        setShowComments('false');
-        // console.log("* * showComments:", showComments); // true bcoz of scheduled setState prevline.
+        setShowComments(false);
+        console.log("* * showComments:", showComments); // true bcoz of scheduled setState prevline.
         setShowComments(prev => {
-          // console.log("* * prev:", prev)                // false bcoz of setState previously.
-          // return !prev;                                 // this line not works!
-          return 'true';                                // this line works!
+          console.log("* * prev:", prev)                // false bcoz of setState previously.
+          return !prev;                                 // this line not works!
+          // return 'true';                                // this line works!
         });
         // console.log("* * showComments:", showComments); // true bcoz of two scheduled setState previously.
       }
